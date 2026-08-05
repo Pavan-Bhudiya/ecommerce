@@ -183,8 +183,6 @@ const Checkout = () => {
 
       const paymentData = await paymentRes.json();
 
-      console.log("PAYMENT RESPONSE:", paymentData);
-
       if (!paymentRes.ok) {
         throw new Error(paymentData.message || "Payment failed");
       }
@@ -195,7 +193,6 @@ const Checkout = () => {
       navigate('/payment');
 
     } catch (err) {
-      console.error(err);
       setError(err.message);
       alert(err.message);
     } finally {

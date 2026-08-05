@@ -11,6 +11,7 @@ import Products from './pages/Products';
 import Category from './pages/Category';
 import Cart from './pages/addCart';
 import Payment from './pages/Payment';
+import AIWidget from './components/AIWidget/AIWidget';
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
         <Route path='/payment' element={<Payment/>}/>
         <Route path='*' element={<Hero />} />
       </Routes>
+      <AIWidget />
     </BrowserRouter>
   );
 };
