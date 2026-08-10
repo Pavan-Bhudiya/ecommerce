@@ -17,19 +17,30 @@ jobs:
         working-directory: ./frontend
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
           node-version: 18.x
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
-      - name: Check Node.js environment
+      - name: Check environment
         run: |
+          echo "Node:"
           node --version
+
+          echo "npm:"
           npm --version
-          which node    
+
+          echo "Vitest:"
+          npm list vitest
+
+          echo "Vite:"
+          npm list vite
+
+          echo "Rolldown:"
+          npm list rolldown  
       - name: Install dependencies
         run: npm ci
       - name: Run lint
