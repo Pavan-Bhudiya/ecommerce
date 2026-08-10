@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
 const categoryLabels = {
@@ -32,7 +32,7 @@ const Category = () => {
         }
         const data = await response.json();
         setProducts(data);
-      } catch (err) {
+      } catch {
         setError(null);
       } finally {
         setLoading(false);

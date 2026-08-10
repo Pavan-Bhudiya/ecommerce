@@ -1,43 +1,49 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Cart = () => {
   const [cart, setCart] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    const storedToken = localStorage.getItem('token');
+    return !storedToken;
+  });
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const token = localStorage.getItem('token')
 
   // FETCH CART
-  const fetchCart = async () => {
-    try {
-      const res = await fetch('/api/cart', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.message || 'Failed to load cart');
-
-      setCart(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    if (!token) {
-      setLoading(false);
-      return;
-    }
+    if (!token) return;
+
+    let cancelled = false;
+
+    const fetchCart = async () => {
+      try {
+        const res = await fetch('/api/cart', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.message || 'Failed to load cart');
+
+        if (!cancelled) setCart(data);
+      } catch (err) {
+        if (!cancelled) setError(err.message);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
 
     fetchCart();
-  }, []);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [token]);
 
   // REMOVE ITEM
   const removeItem = async (productId) => {

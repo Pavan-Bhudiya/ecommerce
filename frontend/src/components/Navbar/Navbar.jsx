@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/logo.jpg';
 import { IoMdSearch } from "react-icons/io";
 import { FaCaretDown, FaCartShopping } from "react-icons/fa6";
@@ -57,14 +57,11 @@ const DropdownLinks=[
 const Navbar = () => {
     //use State hook to manage the state of the menu (open/close)
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-    const [user, setUser] = useState(null);
-    const location = useLocation();
-    const navigate = useNavigate();
-
-    useEffect(() => {
+    const [user, setUser] = useState(() => {
         const stored = localStorage.getItem('user');
-        setUser(stored ? JSON.parse(stored) : null);
-    }, [location]);
+        return stored ? JSON.parse(stored) : null;
+    });
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         localStorage.removeItem('token');

@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    return !token;
+  });
   const [error, setError] = useState('');
 
   useEffect(() => {
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    if (!token) {
-      setLoading(false);
-      return;
-    }
+    if (!token) return;
+
+    let cancelled = false;
 
     const fetchOrders = async () => {
       try {
@@ -25,15 +27,19 @@ const Orders = () => {
           throw new Error(data.message || 'Unable to load orders');
         }
         const data = await response.json();
-        setOrders(data);
+        if (!cancelled) setOrders(data);
       } catch (err) {
-        setError(err.message || 'Unable to load orders');
+        if (!cancelled) setError(err.message || 'Unable to load orders');
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     fetchOrders();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;

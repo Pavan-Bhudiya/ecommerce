@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 const Register = () => {
@@ -31,7 +31,7 @@ const Register = () => {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/');
-    } catch (err) {
+    } catch {
       setError('Unable to register. Try again.');
     } finally {
       setLoading(false);

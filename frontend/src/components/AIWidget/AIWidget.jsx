@@ -60,7 +60,7 @@ export default function AIWidget() {
         content: data.response || 'Sorry, I could not process your request.'
       }
       setMessages(prev => [...prev, assistantMessage])
-    } catch (error) {
+    } catch {
       const errorMessage = {
         role: 'assistant',
         content: 'Sorry, I encountered an error. Please make sure the AI assistant is running.'

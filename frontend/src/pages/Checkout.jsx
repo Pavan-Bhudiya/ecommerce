@@ -1,5 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
+const fetchCart = async (token, setCart, setError, setLoading) => {
+  if (!token) return;
+
+  try {
+    const res = await fetch('/api/cart', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message);
+
+    setCart(data);
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -7,34 +29,15 @@ const Checkout = () => {
   const [phone ,setPhone]=useState('');
 
   const [cart, setCart] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(() => {
+    const storedToken = localStorage.getItem('token');
+    return !storedToken;
+  });
   const [error, setError] = useState('');
 
-  // -------------------------
-  // FETCH CART (FIXED SCOPE)
-  // -------------------------
-  const fetchCart = async () => {
-    if (!token) return;
-
-    try {
-      const res = await fetch('/api/cart', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.message);
-
-      setCart(data);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
   useEffect(() => {
-    fetchCart();
+    if (!token) return;
+    fetchCart(token, setCart, setError, setLoading);
   }, [token]);
 
   // -------------------------
@@ -74,7 +77,7 @@ const Checkout = () => {
       setCart(data);
     } catch (error) {
       alert(error.message);
-      fetchCart();
+      fetchCart(token, setCart, setError, setLoading);
     }
   };
 
