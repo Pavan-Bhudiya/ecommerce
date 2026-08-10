@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import Checkout from '../src/pages/Checkout'
 
@@ -31,7 +31,7 @@ describe('Checkout', () => {
       ],
     }
 
-    global.fetch = vi.fn(() =>
+    window.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,
         json: () => Promise.resolve(mockCart),
@@ -70,7 +70,7 @@ describe('Checkout', () => {
     }
 
     let fetchCount = 0
-    global.fetch = vi.fn(() => {
+    window.fetch = vi.fn(() => {
       fetchCount += 1
       if (fetchCount === 1) {
         return Promise.resolve({
@@ -122,7 +122,7 @@ describe('Checkout', () => {
       ],
     }
 
-    global.fetch = vi.fn(() =>
+    window.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,
         json: () => Promise.resolve(mockCart),
@@ -174,7 +174,7 @@ describe('Checkout', () => {
     }
 
     let fetchCount = 0
-    global.fetch = vi.fn(() => {
+    window.fetch = vi.fn(() => {
       fetchCount += 1
       if (fetchCount === 1) {
         return Promise.resolve({

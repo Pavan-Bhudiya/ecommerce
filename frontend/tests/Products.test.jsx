@@ -14,7 +14,7 @@ describe('Products', () => {
     const mockProducts = [
       { _id: '1', title: 'Test Product', price: 29.99, image: '/img.jpg' },
     ]
-    global.fetch = vi.fn(() =>
+    window.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,
         json: () => Promise.resolve(mockProducts),
@@ -40,7 +40,7 @@ describe('Products', () => {
   })
 
   it('shows error message when product fetch fails', async () => {
-    global.fetch = vi.fn(() =>
+    window.fetch = vi.fn(() =>
       Promise.resolve({
         ok: false,
         json: () => Promise.resolve({ message: 'Server error' }),
@@ -59,7 +59,7 @@ describe('Products', () => {
   })
 
   it('shows empty state when no products are returned', async () => {
-    global.fetch = vi.fn(() =>
+    window.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,
         json: () => Promise.resolve([]),
@@ -82,7 +82,7 @@ describe('Products', () => {
       { _id: '1', title: 'Test Product', price: 29.99, image: '/img.jpg' },
     ]
     let fetchCount = 0
-    global.fetch = vi.fn(() => {
+    window.fetch = vi.fn(() => {
       fetchCount += 1
       if (fetchCount === 1) {
         return Promise.resolve({
@@ -129,7 +129,7 @@ describe('Products', () => {
     const mockProducts = [
       { _id: '1', title: 'Test Product', price: 29.99, image: '/img.jpg' },
     ]
-    global.fetch = vi.fn(() =>
+    window.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,
         json: () => Promise.resolve(mockProducts),
